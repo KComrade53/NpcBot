@@ -88,7 +88,7 @@ function getDamage(character: ICharacter) {
     return output;
 }
 
-function rollVal(min: number, max: number) {
+export function rollVal(min: number, max: number) {
     const val: number = Math.floor(Math.random() * (max - min + 1) + min);
 
     return val;

@@ -1,11 +1,11 @@
 import * as functions from 'firebase-functions';
 import * as  cors from 'cors';
 import * as serviceAccount from './service-account.json';
-import * as http from 'request';
 // @ts-ignore
 import { SessionsClient }  from 'dialogflow';
 // @ts-ignore
 import { WebhookClient } from 'dialogflow-fulfillment';
+import * as character from './character'
 
 const corsHandler = cors({origin: true});
 
@@ -30,13 +30,9 @@ export const dialogflowWebhook = functions.https.onRequest(async (request, respo
     console.log(JSON.stringify(request.body));
 
     async function turnHandler(agent: any) {
-        await http('https://us-central1-npc-bot.cloudfunctions.net/rollAttack', {json: true}, (err: any, res: any, body: any) => {
-            if(err) {
-                console.log(err)
-            }
-            console.log(body);
-            agent.add(`I move and attack for`);
-        });
+        const attack = {hit: character.rollVal(2, 22)}
+        const damage = [{ dmg: character.rollVal(1, 4), type: "fire"}];
+        agent.add(`I move and attack with a roll of ${attack.hit}. If that hits, I deal ${damage[0].dmg} ${damage[0].type} damage.`);
     }
 
     async function createCharacterHandler(agent: any) {
@@ -46,12 +42,11 @@ export const dialogflowWebhook = functions.https.onRequest(async (request, respo
         // const { name, color } = result.parameters;
         //
         // await profile.set({ name, color });
-        agent.add(`Welcome aboard my friend!`);
+        agent.add('Your Bot NPC has been created!');
     }
 
-
     const intentMap = new Map();
-    await intentMap.set('CreateCharacter', createCharacterHandler);
-    await intentMap.set('Turn', turnHandler);
-    await client.handleRequest(intentMap);
+    intentMap.set('CreateCharacter', createCharacterHandler);
+    intentMap.set('Turn', turnHandler);
+    client.handleRequest(intentMap);
 });
