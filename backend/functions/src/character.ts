@@ -71,26 +71,11 @@ export const rollAttack = functions.https.onRequest(async (req, res) => {
 
 export const rollDamage = functions.https.onRequest(async (req, res) => {
     console.info("Rolling an attack");
-    const characterId = "9OwrThTSDUtQGtfHxVNH";
 
     try {
-        const charDoc = await admin.firestore().collection("character").doc(characterId).get();
-        const character: ICharacter = <ICharacter>charDoc.data();
-
-        if (!character) {
-            console.error("Failed to find character for attack roll");
-            throw new Error("Error finding character in db for attack roll");
-        }
-
-        const output = getDamage(character);
-
-        // const attack = character.actions[0].dmg[0];
-
-        // const dmg: number = rollVal(attack.dmgMin, attack.dmgMax);
-        // const output = [{ dmg, type: attack.dmgType }];
+        const output = await initiateDamage();
         res.status(200).send({ output });
     } catch (err) {
-        console.error("Error rolling damage", err);
         res.sendStatus(500);
     }
 });
@@ -137,6 +122,26 @@ export async function initiateAttack() {
         return ({ status: "roll", hit })
     } catch (err) {
         console.error("Error rolling attack", err);
+        throw err;
+    }
+}
+
+export async function initiateDamage() {
+    const characterId = "9OwrThTSDUtQGtfHxVNH";
+
+    try {
+        const charDoc = await admin.firestore().collection("character").doc(characterId).get();
+        const character: ICharacter = <ICharacter>charDoc.data();
+
+        if (!character) {
+            console.error("Failed to find character for attack roll");
+            throw new Error("Error finding character in db for attack roll");
+        }
+
+        const output = getDamage(character);
+        return output;
+    } catch (err) {
+        console.error("Error rolling damage", err);
         throw err;
     }
 }
