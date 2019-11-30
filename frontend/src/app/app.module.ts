@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {NbThemeModule, NbLayoutModule, NbChatModule, NbSpinnerModule} from '@nebular/theme';
 import { ChatbotComponent } from './chatbot/chatbot.component';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
     NbThemeModule.forRoot({name: 'cosmic'}),
     NbLayoutModule,
     NbChatModule,
-    NbSpinnerModule
+    NbSpinnerModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

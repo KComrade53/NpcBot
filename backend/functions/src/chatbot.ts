@@ -1,7 +1,10 @@
 import * as functions from 'firebase-functions';
 import * as  cors from 'cors';
 import * as serviceAccount from './service-account.json';
+import * as http from 'request';
+// @ts-ignore
 import { SessionsClient }  from 'dialogflow';
+// @ts-ignore
 import { WebhookClient } from 'dialogflow-fulfillment';
 
 const corsHandler = cors({origin: true});
@@ -22,21 +25,21 @@ export const dialogflowGateway = functions.https.onRequest((request, response) =
 });
 
 export const dialogflowWebhook = functions.https.onRequest(async (request, response) => {
-    const agent = new WebhookClient({ request, response });
+    const client = new WebhookClient({ request, response });
 
     console.log(JSON.stringify(request.body));
 
-    const result = request.body.queryResult;
-
-    function welcome(agent) {
-        agent.add(`Welcome to my agent!`);
+    async function turnHandler(agent: any) {
+        await http('https://us-central1-npc-bot.cloudfunctions.net/rollAttack', {json: true}, (err: any, res: any, body: any) => {
+            if(err) {
+                console.log(err)
+            }
+            console.log(body);
+            agent.add(`I move and attack for`);
+        });
     }
 
-    function fallback(agent) {
-        agent.add(`Sorry, can you try again?`);
-    }
-
-    async function createCharacterHandler(agent) {
+    async function createCharacterHandler(agent: any) {
         // const db = admin.firestore();
         // const profile = db.collection('users').doc('jeffd23');
         //
@@ -47,9 +50,8 @@ export const dialogflowWebhook = functions.https.onRequest(async (request, respo
     }
 
 
-    let intentMap = new Map();
-    intentMap.set('Default Welcome Intent', welcome);
-    intentMap.set('Default Fallback Intent', fallback);
-    intentMap.set('CreateCharacter', createCharacterHandler);
-    agent.handleRequest(intentMap);
+    const intentMap = new Map();
+    await intentMap.set('CreateCharacter', createCharacterHandler);
+    await intentMap.set('Turn', turnHandler);
+    await client.handleRequest(intentMap);
 });

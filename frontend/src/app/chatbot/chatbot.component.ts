@@ -6,9 +6,11 @@ import {HttpClient} from "@angular/common/http";
   templateUrl: './chatbot.component.html',
   styleUrls: ['./chatbot.component.scss']
 })
+
+// Chatbot https://fireship.io/lessons/build-a-chatbot-with-dialogflow/
 export class ChatbotComponent implements OnInit {
 
-  dialogflowURL = 'https://us-central1-fireship-lessons.cloudfunctions.net/dialogflowGateway';
+  dialogflowURL = 'https://us-central1-npc-bot.cloudfunctions.net/dialogflowGateway';
   messages = [];
   loading = false;
 
@@ -18,7 +20,7 @@ export class ChatbotComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.addBotMessage('Greetings adventurer! How may I be of assistance? ');
+    this.addBotMessage('Greetings adventurer! How may I be of assistance?');
   }
 
   handleUserMessage(event) {
@@ -40,11 +42,10 @@ export class ChatbotComponent implements OnInit {
           }
         }
       }
-    )
-      .subscribe(res => {
-        this.addBotMessage(res.fulfillmentText);
-        this.loading = false;
-      });
+    ).subscribe(res => {
+      this.addBotMessage(res.fulfillmentText);
+      this.loading = false;
+    });
   }
 
   // Helpers
@@ -61,7 +62,7 @@ export class ChatbotComponent implements OnInit {
     this.messages.push({
       text,
       sender: 'Bot',
-      avatar: '/assets/bot.jpeg',
+      avatar: '/assets/d20.png',
       date: new Date()
     });
   }

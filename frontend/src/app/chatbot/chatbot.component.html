@@ -1,4 +1,4 @@
-<nb-chat title="Conversation with a Bot">
+<nb-chat title="Conversation with NPC Bot">
   <nb-chat-message *ngFor="let msg of messages"
                    type="text"
                    [message]="msg.text"
@@ -10,7 +10,7 @@
 
   <nb-chat-message *ngIf="loading" [nbSpinner]="loading" nbSpinnerStatus="info"
                    type="text"
-                   avatar="/assets/bot.jpeg"
+                   avatar="/assets/d20.png"
                    message="...">
   </nb-chat-message>
 

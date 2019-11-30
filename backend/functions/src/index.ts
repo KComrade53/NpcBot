@@ -5,6 +5,7 @@ import * as serviceAccount from './service-account.json';
 // https://firebase.google.com/docs/functions/typescript
 
 admin.initializeApp({
+    // @ts-ignore
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://npc-bot.firebaseio.com"
 });
