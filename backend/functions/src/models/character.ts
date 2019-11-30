@@ -19,8 +19,39 @@ export interface ICharacter {
         inititative: number,
         speed: number,
     },
-    // actions: {},
+    actions: IAction[],
     // inventory: {},
+};
+
+export interface IAction {
+    desc: string,
+    hitBonus: number,
+    dmg: IDamage[],
+}
+
+export interface IDamage {
+    dmgMax: number,
+    dmgMin: number,
+    dmgType: damageType
+}
+
+export enum damageType {
+    fire = "fire",
+    bludge = "bludgeoning",
+    slash = "slashing",
+    pierce = "piercing",
+    ice = "ice",
+    radiant = "radiant",
+}
+
+export const demoAction: IAction = {
+    desc: "Knife",
+    hitBonus: 2,
+    dmg: [{
+        dmgMax: 4,
+        dmgMin: 1,
+        dmgType: damageType.pierce,
+    }],
 };
 
 export const demoChar: ICharacter = {
@@ -44,21 +75,7 @@ export const demoChar: ICharacter = {
         inititative: 11,
         speed: 30,
     },
+    actions: [
+        demoAction,
+    ],
 };
-
-// • Char_id - int
-// • Name - string
-// • Strength - int
-// • Dexterity - int
-// • Constitution - int
-// • Intelligence - int
-// • Wisdom - int
-// • Charisma - int
-// • Initiative - int
-// • HP_max - int
-// • HP_current - int
-// • AC_max - int
-// • AC_current - int
-// • Hit_dice_max - int
-// • Hit_dice_current - int
-// Speed - int
