@@ -109,7 +109,7 @@ function rollVal(min: number, max: number) {
     return val;
 }
 
-async function initiateAttack() {
+export async function initiateAttack() {
     const characterId = "9OwrThTSDUtQGtfHxVNH";
 
     try {
