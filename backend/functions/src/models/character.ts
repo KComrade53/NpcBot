@@ -26,16 +26,25 @@ export interface ICharacter {
 export interface IAction {
     desc: string,
     hitBonus: number,
-    dmg: IDamage[],
+    dmg: IAttackDamage[],
+}
+
+export interface IAttackDamage {
+    dmgMax: number,
+    dmgMin: number,
+    dmgType: DamageType
 }
 
 export interface IDamage {
-    dmgMax: number,
-    dmgMin: number,
-    dmgType: damageType
+    dmg: number,
+    type: DamageType,
 }
 
-export enum damageType {
+export interface IDamageArray {
+    [key: string]: number,
+}
+
+export enum DamageType {
     fire = "fire",
     bludge = "bludgeoning",
     slash = "slashing",
@@ -50,7 +59,7 @@ export const demoAction: IAction = {
     dmg: [{
         dmgMax: 4,
         dmgMin: 1,
-        dmgType: damageType.pierce,
+        dmgType: DamageType.pierce,
     }],
 };
 
