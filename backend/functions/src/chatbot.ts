@@ -30,9 +30,16 @@ export const dialogflowWebhook = functions.https.onRequest(async (request, respo
     console.log(JSON.stringify(request.body));
 
     async function turnHandler(agent: any) {
-        const attack = {hit: character.rollVal(2, 22)}
-        const damage = [{ dmg: character.rollVal(1, 4), type: "fire"}];
-        agent.add(`I move and attack with a roll of ${attack.hit}. If that hits, I deal ${damage[0].dmg} ${damage[0].type} damage.`);
+        const attack = await character.initiateAttack();
+        agent.add(`I move and attack with a roll of ${attack.hit}. Do I hit? `);
+    }
+
+    async function takeDamageHandler(agent: any) {
+    }
+
+    async function attackDamageHandler(agent: any) {
+        const damage = await character.initiateDamage();
+        agent.add(`I deal ${damage[0].dmg} ${damage[0].type} damage.`);
     }
 
     async function createCharacterHandler(agent: any) {
@@ -48,5 +55,7 @@ export const dialogflowWebhook = functions.https.onRequest(async (request, respo
     const intentMap = new Map();
     intentMap.set('CreateCharacter', createCharacterHandler);
     intentMap.set('Turn', turnHandler);
+    intentMap.set('Turn - yes', attackDamageHandler);
+    intentMap.set('TakeDamage', takeDamageHandler);
     client.handleRequest(intentMap);
 });
